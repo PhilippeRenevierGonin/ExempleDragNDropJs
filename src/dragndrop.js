@@ -19,6 +19,11 @@ class Carte {
        });
        this.carteHtml.addEventListener("drop", (e) => this.dropUneAutreCarteCarte(e));
 
+               // creation de la minature
+               let span = document.createElement("span");
+               span.innerHTML = ""+valeur;
+               span.className = couleur;
+               this.carteHtml.appendChild(span);
     }
 
 
@@ -39,10 +44,10 @@ class Carte {
             let haut = parseInt(monStyle["top"]);
             carteDéplacée.style.top=""+(haut+Carte.ESPACEMENT)+"px";
 
-            /*
+            
             let zindex = parseInt(monStyle["z-index"]);
             carteDéplacée.style.zIndex = zindex+1;
-            */
+            
 
         } else {
             console.log("déplacement impossible");
