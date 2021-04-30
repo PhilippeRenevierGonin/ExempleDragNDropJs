@@ -26,7 +26,12 @@ class Carte {
 
     dropUneAutreCarteCarte(e) {
         console.log("drop sur "+this.carteHtml.id+" de "+e.dataTransfer.getData("text/id"));
+        let carteDéplacée = document.getElementById(e.dataTransfer.getData("text/id"));
+        console.log("drop possible ? "+this.peutRecevoir(carteDéplacée.ctrl));
     }
 
 
+    peutRecevoir(carte) {
+        return ((this.couleur !== carte.couleur) && (this.valeur === carte.valeur+1))
+    }
 }
