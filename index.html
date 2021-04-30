@@ -64,7 +64,12 @@
         
 
         document.addEventListener("DOMContentLoaded", () => {
-           
+            let cartes = document.querySelectorAll("div.carte");
+            cartes.forEach(c => {
+                let valeur =  parseInt(c.textContent);
+                let couleur = c.classList[1];
+                let ctrl = new Carte(c,valeur, couleur);
+            });
         });
 
     </script>
