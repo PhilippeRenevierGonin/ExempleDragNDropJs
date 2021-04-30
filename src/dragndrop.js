@@ -27,6 +27,20 @@ class Carte {
     }
 
 
+    memoriserAnciennePosition() {
+        let monStyle = getComputedStyle(this.carteHtml);
+        let gauche = parseInt(monStyle["left"]);
+        let haut = parseInt(monStyle["top"]);
+
+        this.ancienGauche = gauche;
+        this.ancientHaut = haut;
+    }
+
+    restaurer() {
+        this.carteHtml.style.left=""+this.ancienGauche+"px";
+        this.carteHtml.style.top=""+this.ancientHaut+"px";
+    }
+
     drag(e) {
         e.dataTransfer.setData("text/id", this.carteHtml.id);
     }
@@ -37,6 +51,7 @@ class Carte {
         // console.log("drop possible ? "+this.peutRecevoir(carteDéplacée.ctrl));
         
         if (this.peutRecevoir(carteDéplacée.ctrl)) {
+            carteDéplacée.ctrl.memoriserAnciennePosition();
             console.log("déplacement possible");
             let monStyle = getComputedStyle(this.carteHtml);
             let gauche = parseInt(monStyle["left"]);
