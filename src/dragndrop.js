@@ -28,6 +28,9 @@ class Plateau {
         carteDéplacée.style.left=""+x+"px";
         carteDéplacée.style.top=""+y+"px";
 
+
+        this.plateauHtml.appendChild(carteDéplacée);
+
     }
 
 }
@@ -107,14 +110,25 @@ class Carte {
             carteDéplacée.ctrl.memoriserAnciennePosition();
             console.log("déplacement possible");
             let monStyle = getComputedStyle(this.carteHtml);
+            
+            /*
+            changement du calcul : ce n'est plus par rapport au document / à l'onglet, car la carte va être déplacée dans l'autre carte
             let gauche = parseInt(monStyle["left"]);
             carteDéplacée.style.left=""+gauche+"px";
             let haut = parseInt(monStyle["top"]);
             carteDéplacée.style.top=""+(haut+Carte.ESPACEMENT)+"px";
+            */
 
+            
+
+            let bord = parseInt(monStyle["border-left-width"])+1 ; // +1 pour l'ombre. on pourrait le calculer en analysant monStyle["box-shadow"]...
+            carteDéplacée.style.left="-"+bord+"px";
+            carteDéplacée.style.top=""+Carte.ESPACEMENT+"px";
             
             let zindex = parseInt(monStyle["z-index"]);
             carteDéplacée.style.zIndex = zindex+1;
+
+            this.carteHtml.appendChild(carteDéplacée);
             
 
         } else {

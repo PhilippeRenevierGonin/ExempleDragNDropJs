@@ -40,15 +40,21 @@
         }
 
         
-        div#plateau  div.carte:nth-child(2) {
+        div#noir8
+        {
+            /* div#plateau  div.carte:nth-child(2)  changement de selecteur, pour eviter un "conflit" avec le drag'n drop */
             left: calc(3rem + 8px + 1rem);
         }
 
-        div#plateau  div.carte:nth-child(3) {
+
+        div#noir6
+        {
+            /* div#plateau  div.carte:nth-child(3) changement de selecteur, pour eviter un "conflit" avec le drag'n drop */
             left: calc((3rem + 8px + 1rem) * 2);
         }
 
-        div#plateau  div.carte:nth-child(4) {
+        div#rouge5 {
+            /* div#plateau  div.carte:nth-child(4) changement de selecteur, pour eviter un "conflit" avec le drag'n drop */
             left: calc((3rem + 8px + 1rem) * 3);
         }
 
@@ -89,14 +95,14 @@
 
 <div id="plateau">
 
-    <div class="carte red"  draggable="true" id="7rouge">7</div>
+    <div class="carte red"  draggable="true" id="rouge7">7</div>
 
-    <div class="carte black"  draggable="true" id="8noir">8</div>
+    <div class="carte black"  draggable="true" id="noir8">8</div>
 
 
-    <div class="carte black"  draggable="true" id="6noir">6</div>
+    <div class="carte black"  draggable="true" id="noir6">6</div>
 
-    <div class="carte red"  draggable="true" id="5rouge">5</div>
+    <div class="carte red"  draggable="true" id="rouge5">5</div>
 
 </div>
 
