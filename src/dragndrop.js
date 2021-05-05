@@ -5,7 +5,7 @@ class Plateau {
         this.plateauHtml.addEventListener("dragover", ( event ) => {
             // prevent default to allow drop
             event.preventDefault();
-            console.log("dragover sur plateau")
+            console.log("dragover sur plateau");
         });
 
         this.plateauHtml.addEventListener("drop", (e) => this.dropUneCarte(e));
@@ -16,11 +16,13 @@ class Plateau {
         let carteDéplacée = document.getElementById(event.dataTransfer.getData("text/id"));
         carteDéplacée.ctrl.memoriserAnciennePosition();
 
-        let positionDuPlateau = this.plateauHtml.getBoundingClientRect();
-
-        let xInit = parseInt(event.dataTransfer.getData("text/posX"));
+        //  calcul de la nouvelle position : à partir des coordonnées de l'évenement (par rapport à l'onglet qui affiche la page)
+        // moins la position du plateau par rapport à l'onglet : pour placer la carte dans le plateau
+        // et moins la position initial de la souris sur la carte, pour ne pas déplacer la carte (son coin en haut à gauche) sous la souris
+        let positionDuPlateau = this.plateauHtml.getBoundingClientRect(); // position du plateau par rapport à l'onglet 
+        let xInit = parseInt(event.dataTransfer.getData("text/posX"));    // position initial de la souris
         let yInit = parseInt(event.dataTransfer.getData("text/posY"));
-        let x = event.clientX - positionDuPlateau.x - xInit;
+        let x = event.clientX - positionDuPlateau.x - xInit;              // calcul
         let y = event.clientY - positionDuPlateau.y - yInit;
 
         carteDéplacée.style.left=""+x+"px";
@@ -61,6 +63,10 @@ class Carte {
     }
 
 
+    /**
+     * ébauche pour permettre une (et une seule) annulation de déplacement
+     * cela va avec restaurer()
+     */
     memoriserAnciennePosition() {
         let monStyle = getComputedStyle(this.carteHtml);
         let gauche = parseInt(monStyle["left"]);
@@ -76,7 +82,7 @@ class Carte {
     }
 
     drag(e) {
-        e.stopPropagation();
+        e.stopPropagation(); // pour ne pas que le plateau traite aussi l'événement
 
         e.dataTransfer.setData("text/id", this.carteHtml.id);
         
@@ -91,7 +97,8 @@ class Carte {
     }
 
     dropUneAutreCarte(e) {
-        e.stopPropagation();
+        e.stopPropagation();  // pour ne pas que le plateau traite aussi l'événement
+
         console.log("drop sur "+this.carteHtml.id+" de "+e.dataTransfer.getData("text/id"));
         let carteDéplacée = document.getElementById(e.dataTransfer.getData("text/id"));
         // console.log("drop possible ? "+this.peutRecevoir(carteDéplacée.ctrl));
