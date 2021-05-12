@@ -17,11 +17,19 @@
             text-align: center;
         }
 
-        *.red {
+        div.carte.vide {
+            height: calc(4 * 1.2rem + 10px);
+            border-color: white;
+            box-shadow: 0 0 1px white;
+            -webkit-user-select: none; /* Opera / Safari all */
+            user-select: none;
+        }
+
+        *.red,*.rouge {
             color:red;
         }
 
-        *.black {
+        *.black, *.noir {
             color:black;
         }
 
@@ -40,26 +48,28 @@
         }
 
         
-        div#noir8
+        div.carte.vide:nth-child(1)
         {
             /* div#plateau  div.carte:nth-child(2)  changement de selecteur, pour eviter un "conflit" avec le drag'n drop */
             left: calc(3rem + 8px + 1rem);
         }
 
 
-        div#noir6
+        div.carte.vide:nth-child(2)
         {
             /* div#plateau  div.carte:nth-child(3) changement de selecteur, pour eviter un "conflit" avec le drag'n drop */
             left: calc((3rem + 8px + 1rem) * 2);
         }
 
-        div#rouge5 {
+        div.carte.vide:nth-child(3)
+        {
             /* div#plateau  div.carte:nth-child(4) changement de selecteur, pour eviter un "conflit" avec le drag'n drop */
             left: calc((3rem + 8px + 1rem) * 3);
         }
 
         
-        div#rouge7bis {
+        div.carte.vide:nth-child(4)
+        {
             left: calc((3rem + 8px + 1rem) * 4);
         }
 
@@ -83,12 +93,58 @@
 
             let plateau = new Plateau(document.getElementById("plateau"));
 
-            let cartes = document.querySelectorAll("div.carte");
-            cartes.forEach(c => {
-                let valeur =  parseInt(c.textContent);
-                let couleur = c.classList[1];
-                let ctrl = new Carte(c,valeur, couleur);
+            let zones = [];
+
+            let cartesVides = document.querySelectorAll("div.carte.vide");
+            cartesVides.forEach(c => {
+                let ctrl = new CarteVide(c);
+                zones.push(c);
             });
+
+            
+
+            // on récupère le <template>
+            let carteTemplate = document.querySelector("#modeleCarte") ;
+            // on récupère le DocumentFragment
+            let docFrag = document.importNode(carteTemplate.content, true) ;
+            // on récupère la première div (de classe
+            // « carte cachée » du DocumentFragment 
+            let nouvelleCarte = docFrag.querySelector("div.carte");
+
+            let listeCartes = [];
+            for(let i = 1; i < 10; i++) {
+                listeCartes.push({valeur:i,couleur:"rouge"});
+                listeCartes.push({valeur:i,couleur:"noir"});
+            }
+            
+
+            let cptZone = 0;
+            listeCartes.forEach(c => {
+                let carteHtml = nouvelleCarte.cloneNode(true);
+                console.dir(c.couleur);
+                carteHtml.classList.toggle(c.couleur);
+                carteHtml.id = c.couleur+c.valeur;
+                carteHtml.innerHTML = c.valeur;
+
+
+                let monStyle = getComputedStyle(zones[cptZone]);
+                let bord = parseInt(monStyle["border-left-width"])+1 ; // +1 pour l'ombre. on pourrait le calculer en analysant monStyle["box-shadow"]...
+                carteHtml.style.left="-"+bord+"px";
+                carteHtml.style.top=""+Carte.ESPACEMENT+"px";
+                
+                let zindex = parseInt(monStyle["z-index"]);
+                carteHtml.style.zIndex = zindex+1;
+                
+                let ctrl = new Carte(carteHtml,c.valeur, c.couleur);
+
+                // plateau.plateauHtml.appendChild(carteHtml);
+                zones[cptZone].appendChild(carteHtml);
+                zones[cptZone] = carteHtml;
+                cptZone = (cptZone+1)%zones.length;
+
+            });
+            
+
         });
 
     </script>
@@ -98,8 +154,10 @@
 <body>
 <h1>Drag'n drop</h1>
 
-<div id="plateau">
+<template id="modeleCarte"><div class="carte" draggable="true"></div></template>
 
+<div id="plateau">
+<!--
     <div class="carte red"  draggable="true" id="rouge7">7</div>
 
     <div class="carte black"  draggable="true" id="noir8">8</div>
@@ -111,6 +169,12 @@
 
 
     <div class="carte red"  draggable="true" id="rouge7bis">7</div>
+-->
+
+    <div class="carte vide"></div>
+    <div class="carte vide"></div>
+    <div class="carte vide"></div>
+    <div class="carte vide"></div>
 
 
 </div>

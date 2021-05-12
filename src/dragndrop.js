@@ -36,6 +36,7 @@ class Plateau {
 }
 
 
+
 class Carte {
 
     static ESPACEMENT = 20; //px
@@ -58,11 +59,13 @@ class Carte {
        });
        this.carteHtml.addEventListener("drop", (e) => this.dropUneAutreCarte(e));
 
-               // creation de la minature
-               let span = document.createElement("span");
-               span.innerHTML = ""+valeur;
-               span.className = couleur;
-               this.carteHtml.appendChild(span);
+        if (this.valeur > 0) {
+            // creation de la minature
+            let span = document.createElement("span");
+            span.innerHTML = ""+valeur;
+            span.className = couleur;
+            this.carteHtml.appendChild(span);
+        }      
     }
 
 
@@ -75,13 +78,16 @@ class Carte {
         let gauche = parseInt(monStyle["left"]);
         let haut = parseInt(monStyle["top"]);
 
+
         this.ancienGauche = gauche;
         this.ancientHaut = haut;
+        this.ancienParent = this.carteHtml.parentNode;
     }
 
     restaurer() {
         this.carteHtml.style.left=""+this.ancienGauche+"px";
         this.carteHtml.style.top=""+this.ancientHaut+"px";
+        this.ancienParent.appendChild(this.carteHtml);
     }
 
     drag(e) {
@@ -140,5 +146,18 @@ class Carte {
 
     peutRecevoir(carte) {
         return ((this.couleur !== carte.couleur) && (this.valeur === carte.valeur+1))
+    }
+}
+
+
+
+
+class CarteVide extends Carte {
+    constructor(eltHtml){
+        super(eltHtml, -1, "aucune");
+    }
+
+    peutRecevoir(carte) {
+        return true; // il faudrait vérifier que la carte n'a pas encore de carte à l'intérieur.
     }
 }
